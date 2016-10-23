@@ -15,7 +15,7 @@ connection.connect(function(err) {
 })
 
 var printBamazonShop = function(){
-    console.log("!!!ALL AVAILABLE PRODUCTS FOR SALE AT BAMAZON!!!");
+    console.log("\n!!!ALL AVAILABLE PRODUCTS FOR SALE AT BAMAZON!!!");
     connection.query('SELECT * FROM products', function(err, res){
         res.forEach(function(row){
             console.log("\nItemID: " + row.itemID + "\nProduct: " + row.product_name + "\nLocated in the " + row.department_name + " department." + "\nPrice: $" + row.price + "\nQuantity Left: " + row.stock_quantity);
@@ -36,21 +36,25 @@ var bamazonShopping = function() {
 			type: 'input',
 			message: 'How many would you like to purchase?'
 		}]).then(function(answer) {
-			console.log(answer);
 			var itemID = answer.item;
-			console.log(itemID);
+            //index is -1 of the itemID since list starts at 1 and array is 0
 			var chosenItem = res[itemID-1];
-			console.log(chosenItem);
+            var productName = chosenItem.product_name;
+            var itemPrice = chosenItem.price;
 			var newQuantity = chosenItem.stock_quantity - answer.quantity;
-            console.log(newQuantity);
 
 			if (parseInt(newQuantity) >= 0) {
 				connection.query('UPDATE products SET ? WHERE itemID = ?', [{ stock_quantity: newQuantity }, itemID]);
-                console.log("Purchase successful");
-                bamazonShopping();
+                console.log("\n=====================================================");
+                console.log("Your purchase of " + productName + " was successful.");
+                console.log("Your total was: $" + itemPrice);
+                console.log("=====================================================");
+                setTimeout(bamazonShopping, 3000);
 			} else {
+                console.log("===========================");
 				console.log('Sorry! We are out of stock.');
-			    bamazonShopping();
+                console.log("===========================");
+			    setTimeout(bamazonShopping, 3000);
 			}
 		})
 	})
