@@ -1,4 +1,9 @@
-USE Bamazon;
+CREATE DATABASE BamazonDB;
+USE BamazonDB;
+
+DROP TABLE IF EXISTS products;
+
+CREATE TABLE products (PRIMARY KEY(itemID), itemID INTEGER(5) AUTO_INCREMENT NOT NULL, product_name VARCHAR(100), department_name VARCHAR(100), price FLOAT(10),stock_quantity INTEGER(5));
 
 INSERT INTO products (product_name, department_name, price, stock_quantity)
 VALUES ('Rubiks Cube', 'Toys and Games', 14.99, 20);
