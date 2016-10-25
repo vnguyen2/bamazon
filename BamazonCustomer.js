@@ -11,7 +11,8 @@ var connection = mysql.createConnection({
 
 connection.connect(function(err) {
     if (err) throw err;
-	console.log("You are connected."); 
+	console.log("You are connected.");
+    bamazonShopping(); 
 })
 
 var printBamazonShop = function(){
@@ -21,6 +22,23 @@ var printBamazonShop = function(){
             console.log("\nItemID: " + row.itemID + "\nProduct: " + row.product_name + "\nLocated in the " + row.department_name + " department." + "\nPrice: $" + row.price + "\nQuantity Left: " + row.stock_quantity);
         });    
     });
+}
+
+var restart = function(){
+	inquirer.prompt([
+		{
+			type: "confirm",
+			name: "restart",
+			message: "Would you like to purchase anything else?"
+		}
+	]).then(function(userChoice){
+		if (userChoice.restart){
+			bamazonShopping();
+		}else{
+			console.log("Thank you! Please come again.");
+            connection.end();
+		}
+	})
 }
 
 var bamazonShopping = function() {
@@ -49,15 +67,17 @@ var bamazonShopping = function() {
                 console.log("Your purchase of " + productName + " was successful.");
                 console.log("Your total was: $" + itemPrice);
                 console.log("=====================================================");
-                setTimeout(bamazonShopping, 3000);
+                restart();
 			} else {
                 console.log("===========================");
 				console.log('Sorry! We are out of stock.');
                 console.log("===========================");
-			    setTimeout(bamazonShopping, 3000);
+			    restart();
 			}
 		})
 	})
 }
-bamazonShopping();
+
+
+
 
