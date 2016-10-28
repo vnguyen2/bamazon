@@ -1,5 +1,6 @@
 var mysql = require('mysql');
 var inquirer = require('inquirer');
+var Table = require('cli-table');
 
 var connection = mysql.createConnection({
     host: "localhost",
@@ -18,9 +19,19 @@ connection.connect(function(err) {
 var printBamazonShop = function(){
     console.log("\n!!!ALL AVAILABLE PRODUCTS FOR SALE AT BAMAZON!!!");
     connection.query('SELECT * FROM products', function(err, res){
-        res.forEach(function(row){
-            console.log("\nItemID: " + row.itemID + "\nProduct: " + row.product_name + "\nLocated in the " + row.department_name + " department." + "\nPrice: $" + row.price + "\nQuantity Left: " + row.stock_quantity);
-        });    
+		var table = new Table({
+			head: ['Item ID', 'Product Name', 'Department Name', 'Item Price', 'Quantity'],
+			colWidths: [10, 45, 35, 12, 10]
+		});
+		for (var i = 0; i < res.length; i++) {
+			table.push([res[i].itemID, res[i].product_name, res[i].department_name, res[i].price, res[i].stock_quantity]);
+		}
+		console.log(table.toString());
+		// table.push(
+        // 	res.forEach(function(row){
+        //     	console.log("\nItemID: " + row.itemID + "\nProduct: " + row.product_name + "\nLocated in the " + row.department_name + " department." + "\nPrice: $" + row.price + "\nQuantity Left: " + row.stock_quantity);
+        // 	})
+		// );    
     });
 }
 
