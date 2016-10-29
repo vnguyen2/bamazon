@@ -1,1 +1,5 @@
 # bamazon
+
+
+
+![BAMAZON](bamazonSS.png)
